@@ -6,13 +6,16 @@ import com.google.common.eventbus.Subscribe;
 import com.sany.email.model.req.HtmlEmailDTO;
 import com.sany.email.model.req.ImgEmailDTO;
 import com.sany.email.model.req.TextEmailDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 
 @Service
+@Slf4j
 public class EventBusListener {
 
     /**
@@ -60,7 +63,8 @@ public class EventBusListener {
                     htmlEmailDTO.getSubject()
             );
         } catch (MessagingException e) {
-           // nothing to do
+            //@todo 后续完善,将失败的信息保存到数据库中
+            log.error("向收件人" + htmlEmailDTO.getTo() + "发送邮件异常,异常信息为:" + e.getMessage(),e);
         }
     }
 
@@ -80,7 +84,8 @@ public class EventBusListener {
                     imgEmailDTO.getImgPath()
             );
         } catch (MessagingException e) {
-            // nothing to do
+            //@todo 后续完善,将失败的信息保存到数据库中
+            log.error("向收件人" + imgEmailDTO.getTo() + "发送邮件异常,异常信息为:" + e.getMessage(),e);
         }
     }
 }

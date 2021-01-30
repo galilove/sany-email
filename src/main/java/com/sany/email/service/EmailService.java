@@ -1,5 +1,6 @@
 package com.sany.email.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,6 +16,7 @@ import java.io.File;
  * @author gali
  */
 @Service
+@Slf4j
 public class EmailService {
 
     @Autowired
@@ -42,6 +44,7 @@ public class EmailService {
         simpleMailMessage.setText(content);
         simpleMailMessage.setFrom(from);
         javaMailSender.send(simpleMailMessage);
+        log.info("向收件人={}发送邮件成功",to);
     }
 
     /**
@@ -61,7 +64,7 @@ public class EmailService {
         messageHelper.setFrom(from);
         messageHelper.setText(htmlContent, true);
         javaMailSender.send(message);
-        System.out.println("邮件发送成功");
+        log.info("向收件人={}发送邮件成功",to);
     }
 
     /**
@@ -86,5 +89,6 @@ public class EmailService {
         messageHelper.setText(imgContent, true);
         messageHelper.addInline(rscId, new File(imgPath));
         javaMailSender.send(message);
+        log.info("向收件人={}发送邮件成功",to);
     }
 }

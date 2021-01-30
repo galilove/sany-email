@@ -1,5 +1,7 @@
 package com.sany.email.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.eventbus.AsyncEventBus;
 import com.sany.email.model.req.HtmlEmailDTO;
 import com.sany.email.model.req.ImgEmailDTO;
@@ -26,15 +28,17 @@ public class MailController {
     @RequestMapping(value = "/sendTextMail", method = RequestMethod.POST)
     public Result<Integer> sendTextMail(@RequestBody Request<TextEmailDTO> request) {
         Result<Integer> result = Result.create();
+        result.setMessage("邮件发送成功");
         asyncEventBus.post(request.getData());
-        return result.success(1);
+        return result.success(200);
     }
 
     @RequestMapping(value = "/sendHtmlMail", method = RequestMethod.POST)
     public Result<Integer> sendHtmlMail(@RequestBody Request<HtmlEmailDTO> request) {
         Result<Integer> result = Result.create();
         asyncEventBus.post(request.getData());
-        return result.success(1);
+        result.setMessage("邮件发送成功");
+        return result.success(200);
     }
 
     /**
@@ -53,7 +57,19 @@ public class MailController {
         sb.append("<img src=\'cid:").append(imgEmailDTO.getRscId()).append("\'></img>");
         imgEmailDTO.setImgContent(sb.toString());
         asyncEventBus.post(imgEmailDTO);
-        return result.success(1);
+        result.setMessage("邮件发送成功");
+        return result.success(200);
     }
 
+    public static void main(String[] args) {
+        Request<TextEmailDTO> request = new Request<TextEmailDTO>();
+        TextEmailDTO textEmailDTO = new TextEmailDTO();
+        textEmailDTO.setSubject("标题");
+        textEmailDTO.setTo("to");
+        textEmailDTO.setContent("内容");
+        request.setData(textEmailDTO);
+
+        String s = JSONObject.toJSONString(request);
+        System.out.println(s);
+    }
 }
